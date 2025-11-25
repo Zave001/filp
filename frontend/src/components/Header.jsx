@@ -24,6 +24,12 @@ function Header({ user, cartCount, onViewChange, onLogout }) {
               >
                 Корзина ({cartCount})
               </button>
+              <button
+                className="nav-button"
+                onClick={() => onViewChange('orders')}
+              >
+                Заказы
+              </button>
               <span className="user-info">
                 Привет, {user.userName}!
               </span>

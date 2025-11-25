@@ -11,11 +11,13 @@ import Data.Aeson
   )
 import Data.Aeson.Types (withObject)
 import Data.Text.Lazy (unpack)
-import Data.Text (Text, isInfixOf, toLower)  -- Добавлено!
+import Data.Text (Text)
+import qualified Data.Text as T
 import Control.Monad.IO.Class (liftIO)
 import Models.Product
 import Models.Category
 import Models.User
+import Models.Order
 import Logic.Discount
 import Logic.Filters
 import Database.Queries
@@ -98,9 +100,9 @@ routes conn categories allProducts = do
   get "/api/products" $ json allProducts
 
   get "/api/products/search" $ do
-    q <- param "q" `rescue` const (return "")
-    let lowerQ = toLower q
-        results = filter (\p -> lowerQ `isInfixOf` toLower (Models.Product.name p)) allProducts
+    q <- param "q" `rescue` const (return ("" :: Text))
+    let lowerQ = T.toLower q
+        results = filter (\p -> lowerQ `T.isInfixOf` T.toLower (Models.Product.name p)) allProducts
     json results
 
   get "/api/products/category/:id" $ do
@@ -142,13 +144,51 @@ routes conn categories allProducts = do
     let results = filterByNumericAttribute attr target allProducts
     json results
 
+  get "/api/products/filtered" $ do
+    q <- param "q" `rescue` const (return ("" :: Text))
+    categoryParam <- param "category" `rescue` const (return ("" :: Text))
+    manufacturerParam <- param "manufacturer" `rescue` const (return ("" :: Text))
+    inStockParam <- param "inStock" `rescue` const (return ("" :: Text))
+    sortParam <- param "sort" `rescue` const (return ("" :: Text))
+
+    let filtered = allProducts
+
+    -- Apply search
+    let filtered1 = if not (T.null q)
+                    then filter (\p -> T.toLower q `T.isInfixOf` T.toLower (Models.Product.name p)) filtered
+                    else filtered
+
+    -- Apply category
+    let filtered2 = if not (T.null categoryParam)
+                    then filter (\p -> category_id p == read (T.unpack categoryParam)) filtered1
+                    else filtered1
+
+    -- Apply manufacturer
+    let filtered3 = if not (T.null manufacturerParam)
+                    then filterByManufacturer (read (T.unpack manufacturerParam)) filtered2
+                    else filtered2
+
+    -- Apply inStock
+    let filtered4 = if not (T.null inStockParam)
+                    then filterByStock (read (T.unpack inStockParam)) filtered3
+                    else filtered3
+
+    -- Apply sorting
+    let sorted = case sortParam of
+                   "price-asc" -> sortByPriceAsc filtered4
+                   "price-desc" -> sortByPriceDesc filtered4
+                   "name" -> sortByName filtered4
+                   _ -> filtered4
+
+    json sorted
+
   post "/api/orders" $ do
     req <- jsonData :: ActionM OrderRequest
     let items  = orItems req
         userId = orUserId req
 
     let total = calculateTotalCost items allProducts
-        final = calculateFinalCost categories items allProducts total
+        (final, discountDesc) = calculateFinalCost categories items allProducts total
         saved = total - final
 
     case conn of
@@ -170,3 +210,30 @@ routes conn categories allProducts = do
           , "saved"     .= saved
           , "message"   .= ("Demo order placed successfully!" :: String)
           ]
+
+  post "/api/cart/calculate" $ do
+    req <- jsonData :: ActionM OrderRequest
+    let items  = orItems req
+        userId = orUserId req
+
+    let total = calculateTotalCost items allProducts
+        (final, discountDesc) = calculateFinalCost categories items allProducts total
+        saved = total - final
+
+    json $ object
+      [ "totalCost" .= total
+      , "finalCost" .= final
+      , "saved"     .= saved
+      , "discountDescription" .= discountDesc
+      ]
+
+  get "/api/orders/:userId" $ do
+    userId <- read <$> param "userId"
+    case conn of
+      Just c -> do
+        orders <- liftIO $ getOrdersByUser c userId
+        json orders
+      Nothing -> do
+        -- Demo mode - return mock order
+        let mockOrder = Order 1 userId [(1, 2), (3, 1)] (read "2023-01-01 00:00:00 UTC") 100000.0 95000.0
+        json [mockOrder]

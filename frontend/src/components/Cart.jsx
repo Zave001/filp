@@ -1,21 +1,45 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../services/api';
 import './Cart.css';
 
 function Cart({ cart, user, onUpdateQuantity, onRemoveItem, onViewChange }) {
   const [loading, setLoading] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [calculatedTotals, setCalculatedTotals] = useState({ totalCost: 0, finalCost: 0, saved: 0, discountDescription: '' });
+
+  useEffect(() => {
+    if (cart.length > 0 && user) {
+      calculateCartTotals();
+    } else {
+      setCalculatedTotals({ totalCost: 0, finalCost: 0, saved: 0, discountDescription: '' });
+    }
+  }, [cart, user]);
+
+  const calculateCartTotals = async () => {
+    try {
+      const cartData = {
+        userId: user.userId,
+        items: cart.map(item => ({
+          productId: item.productId,
+          quantity: item.quantity
+        }))
+      };
+      const result = await api.calculateCart(cartData);
+      setCalculatedTotals(result);
+    } catch (error) {
+      console.error('Failed to calculate cart:', error);
+      // Fallback to simple calculation
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      setCalculatedTotals({ totalCost: total, finalCost: total, saved: 0, discountDescription: 'Без скидки' });
+    }
+  };
 
   const calculateTotal = () => {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
   const calculateDiscountedTotal = () => {
-    const total = calculateTotal();
-
-    // Simple discount logic (can be enhanced based on backend rules)
-    // For now, just return total - in real app, this would come from backend
-    return total;
+    return calculatedTotals.finalCost || calculateTotal();
   };
 
   const formatPrice = (price) => {
@@ -154,8 +178,20 @@ function Cart({ cart, user, onUpdateQuantity, onRemoveItem, onViewChange }) {
       <div className="cart-summary">
         <div className="summary-row">
           <span>Итого:</span>
-          <span className="total-amount">{formatPrice(calculateTotal())}</span>
+          <span className="total-amount">{formatPrice(calculatedTotals.totalCost || calculateTotal())}</span>
         </div>
+
+        {calculatedTotals.saved > 0 && (
+          <>
+            <div className="summary-row">
+              <span>Скидка:</span>
+              <span className="discount-amount">-{formatPrice(calculatedTotals.saved)}</span>
+            </div>
+            <div className="discount-description">
+              {calculatedTotals.discountDescription}
+            </div>
+          </>
+        )}
 
         <div className="summary-row">
           <span>Итого со скидками:</span>

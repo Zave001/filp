@@ -34,7 +34,15 @@ applyStringsDiscount cats items products total =
       discount = if hasGuitar && stringsCost > 0 then stringsCost * 0.10 else 0
   in total - discount
 
-calculateFinalCost :: [Category] -> [(Int, Int)] -> [Product] -> Double -> Double
+calculateFinalCost :: [Category] -> [(Int, Int)] -> [Product] -> Double -> (Double, String)
 calculateFinalCost cats items products total =
   let afterCombo = applyComboDiscount cats items products total
-  in applyStringsDiscount cats items products afterCombo
+      final = applyStringsDiscount cats items products afterCombo
+      comboApplied = afterCombo < total
+      stringsApplied = final < afterCombo
+      desc = case (comboApplied, stringsApplied) of
+               (True, True) -> "Комбо скидка 5% + скидка на струны 10%"
+               (True, False) -> "Комбо скидка 5%"
+               (False, True) -> "Скидка на струны 10%"
+               _ -> "Без скидки"
+  in (final, desc)

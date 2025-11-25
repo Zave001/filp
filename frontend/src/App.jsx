@@ -3,6 +3,7 @@ import Header from './components/Header';
 import ProductList from './components/ProductList';
 import Auth from './components/Auth';
 import Cart from './components/Cart';
+import Orders from './components/Orders';
 import './App.css';
 
 function App() {
@@ -78,6 +79,8 @@ function App() {
             onViewChange={setCurrentView}
           />
         );
+      case 'orders':
+        return user ? <Orders userId={user.userId} /> : <div>Please log in to view orders</div>;
       case 'products':
       default:
         return <ProductList onAddToCart={addToCart} />;

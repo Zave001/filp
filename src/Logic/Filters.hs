@@ -83,7 +83,7 @@ isAmplifier product categories =
 isCable :: Product -> [Category] -> Bool
 isCable product categories =
   let cableCategoryIds = [categoryID | Category categoryID name _ _ <- categories,
-        name == "Кабели"]
+        name `elem` ["Кабели", "Аксессуары"]]
   in category_id product `elem` cableCategoryIds
 
 isStrings :: Product -> [Category] -> Bool

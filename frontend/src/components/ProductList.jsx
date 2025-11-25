@@ -4,7 +4,6 @@ import ProductCard from './ProductCard';
 import './ProductList.css';
 
 function ProductList({ onAddToCart }) {
-  const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,78 +13,26 @@ function ProductList({ onAddToCart }) {
   const [sortBy, setSortBy] = useState('');
 
   useEffect(() => {
-    loadProducts();
-  }, []);
+    loadFilteredProducts();
+  }, [searchQuery, selectedCategory, selectedManufacturer, inStockOnly, sortBy]);
 
-  useEffect(() => {
-    applyFilters();
-  }, [products, searchQuery, selectedCategory, selectedManufacturer, inStockOnly, sortBy]);
-
-  const loadProducts = async () => {
+  const loadFilteredProducts = async () => {
+    setLoading(true);
     try {
-      const data = await api.getProducts();
-      setProducts(data);
+      const params = {};
+      if (searchQuery) params.q = searchQuery;
+      if (selectedCategory) params.category = selectedCategory;
+      if (selectedManufacturer) params.manufacturer = selectedManufacturer;
+      if (inStockOnly) params.inStock = true;
+      if (sortBy) params.sort = sortBy;
+
+      const data = await api.getFilteredProducts(params);
       setFilteredProducts(data);
     } catch (error) {
       console.error('Failed to load products:', error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const applyFilters = async () => {
-    let filtered = [...products];
-
-    // Search filter
-    if (searchQuery) {
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    // Category filter
-    if (selectedCategory) {
-      try {
-        filtered = await api.getProductsByCategory(selectedCategory);
-      } catch (error) {
-        console.error('Failed to filter by category:', error);
-      }
-    }
-
-    // Manufacturer filter
-    if (selectedManufacturer) {
-      try {
-        filtered = await api.getProductsByManufacturer(selectedManufacturer);
-      } catch (error) {
-        console.error('Failed to filter by manufacturer:', error);
-      }
-    }
-
-    // Stock filter
-    if (inStockOnly) {
-      try {
-        filtered = await api.getProductsByStock(true);
-      } catch (error) {
-        console.error('Failed to filter by stock:', error);
-      }
-    }
-
-    // Sorting
-    if (sortBy) {
-      try {
-        if (sortBy === 'price-asc') {
-          filtered = await api.sortProductsByPrice('asc');
-        } else if (sortBy === 'price-desc') {
-          filtered = await api.sortProductsByPrice('desc');
-        } else if (sortBy === 'name') {
-          filtered = await api.sortProductsByName();
-        }
-      } catch (error) {
-        console.error('Failed to sort products:', error);
-      }
-    }
-
-    setFilteredProducts(filtered);
   };
 
   const handleSearch = (e) => {

@@ -43,6 +43,11 @@ class ApiService {
     return this.request('/products');
   }
 
+  async getFilteredProducts(params = {}) {
+    const query = new URLSearchParams(params).toString();
+    return this.request(`/products/filtered?${query}`);
+  }
+
   async searchProducts(query) {
     return this.request(`/products/search?q=${encodeURIComponent(query)}`);
   }
@@ -75,12 +80,24 @@ class ApiService {
     return this.request(`/products/filter/numeric?attr=${attr}&value=${value}`);
   }
 
+  // Cart
+  async calculateCart(cartData) {
+    return this.request('/cart/calculate', {
+      method: 'POST',
+      body: JSON.stringify(cartData),
+    });
+  }
+
   // Orders
   async createOrder(orderData) {
     return this.request('/orders', {
       method: 'POST',
       body: JSON.stringify(orderData),
     });
+  }
+
+  async getOrders(userId) {
+    return this.request(`/orders/${userId}`);
   }
 }
 

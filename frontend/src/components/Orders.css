@@ -1,0 +1,85 @@
+.orders-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.orders-container h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.no-orders {
+  text-align: center;
+  color: #666;
+  font-size: 18px;
+  margin-top: 50px;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.order-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.order-id {
+  font-weight: bold;
+  font-size: 18px;
+  color: #007bff;
+}
+
+.order-date {
+  color: #666;
+  font-size: 14px;
+}
+
+.order-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.order-items {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.order-item {
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.order-prices {
+  text-align: right;
+  font-weight: bold;
+}
+
+.order-prices div {
+  margin-bottom: 5px;
+}
+
+.order-prices div:first-child {
+  color: #666;
+}
+
+.order-prices div:last-child {
+  color: #28a745;
+  font-size: 18px;
+}

@@ -136,6 +136,14 @@
   color: #28a745;
 }
 
+.discount-description {
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  margin: 5px 0;
+  font-style: italic;
+}
+
 .cart-actions {
   text-align: center;
 }
