@@ -1,0 +1,49 @@
+cabal-version: 2.2
+name: filp
+version: 0.1.0.0
+synopsis: MusicalHub — онлайн-магазин музыкальных инструментов
+license: BSD-3-Clause
+license-file: LICENSE
+author: Zave001
+maintainer: kirill.vasilev04@mail.ru
+category: Web
+build-type: Simple
+extra-source-files:
+    README.md
+    migrations/*.sql
+    data/seed.sql
+
+executable filp
+  hs-source-dirs: app src
+  main-is: Main.hs
+  other-modules:
+      Routes
+      Database.Connection
+      Database.Queries
+      Models.Product
+      Models.Category
+      Models.Manufacturer
+      Models.User
+      Models.Order
+      Logic.Discount
+      Logic.Filters
+
+  build-depends:
+      base >= 4.7 && < 5
+    , scotty >= 0.12
+    , aeson >= 2.0
+    , text
+    , bytestring
+    , postgresql-simple >= 0.6
+    , unordered-containers
+    , time
+    , scientific
+    , http-types
+
+  ghc-options:
+      -Wall
+      -threaded
+      -rtsopts
+      -with-rtsopts=-N
+
+  default-language: Haskell2010
