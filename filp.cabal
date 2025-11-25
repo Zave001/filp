@@ -1,7 +1,7 @@
 cabal-version: 2.2
 name: filp
 version: 0.1.0.0
-synopsis: MusicalHub — онлайн-магазин музыкальных инструментов
+synopsis: MusicalHub - online musical instruments store
 license: BSD-3-Clause
 license-file: LICENSE
 author: Zave001
@@ -40,6 +40,7 @@ executable filp
     , scientific
     , http-types
     , pureMD5
+    , wai-cors
 
   ghc-options:
       -Wall

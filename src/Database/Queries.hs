@@ -84,7 +84,7 @@ createUser conn username email pwd = do
     (username, email, pwd)
   return uid
 
-createOrder :: Connection -> Int -> [OrderItem] -> Float -> Float -> IO Int
+createOrder :: Connection -> Int -> [OrderItem] -> Double -> Double -> IO Int
 createOrder conn userId items total final = do
   [Only orderId] <- query conn
     "INSERT INTO orders (user_id, items, totalCost, finalCost) VALUES (?, ?::jsonb, ?, ?) RETURNING orderID"

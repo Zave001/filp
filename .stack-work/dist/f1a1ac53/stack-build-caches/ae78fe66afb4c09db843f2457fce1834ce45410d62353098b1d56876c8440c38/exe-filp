@@ -1,19 +1,19 @@
 D:\projects\filp\README.md:
-  hash: f2289aae416ceea42617e5f7536bbfbb283754976d36089d86d45a970b27c30e
+  hash: 39c2d95af04b80b7d581edef426ead1778794b4f5e953cd323ede1ffd7ff93be
 D:\projects\filp\app\Main.hs:
-  hash: 91ab4b9c27a8538e1b4b258fd9830277b5eebfd7f902b95a843355f67dd5a6cf
+  hash: 6d9077f010a1595ec1e8b8d844ef16b32462465c315382dd5d1c36c896365583
 D:\projects\filp\data\seed.sql:
   hash: cf15d15498fd6c898f06020b4c34675ed76a4075a4b9893c861b657f9fbce1b8
 D:\projects\filp\filp.cabal:
-  hash: ee99fd4ad2c534db0b1f389a8530b7195741daa72d32c6b23eaa7eceab3dc287
+  hash: 097ac3ca55fe59e40159fe57d09e729bca8fd2829462ef73d1a3628441de5074
 D:\projects\filp\migrations\001-initial-schema.sql:
   hash: b3a93a23cd8c449dd55f2d40c128f743cfb1191af95bdfca6a0c37cc6ecbeba6
 D:\projects\filp\src\Database\Connection.hs:
   hash: 21e275e0a7acf63d2560a1a6bd8ce2df75a36915b72c6577880d522f5ee82cd3
 D:\projects\filp\src\Database\Queries.hs:
-  hash: b85a7497605bb0668cec5f3177de23d294c2c776924f56dda0c547dd122d78e5
+  hash: 39a33d2cf39534d8d99e01ddf5c23594029ddce796293a4b2b9cbd5e8e72a2fa
 D:\projects\filp\src\Logic\Discount.hs:
-  hash: f20a44a892718e526e0a026ed3a75bfc7956c9981e2a4c3e7c0edd7869db4f0f
+  hash: fd7559055ad7e4fd5d0716a21ccbdaf3e79a6a75a9dcfeb8f8ad3f85bb3798f1
 D:\projects\filp\src\Logic\Filters.hs:
   hash: 9dbab1c820abc2d1f35f249589270b826b5d1be04f9c1bee86e9e1c66701a346
 D:\projects\filp\src\Models\Category.hs:
@@ -21,10 +21,10 @@ D:\projects\filp\src\Models\Category.hs:
 D:\projects\filp\src\Models\Manufacturer.hs:
   hash: 8a4a9769cd5bcc51266a89fd95c86436c5b6b1250e013bf89cc63a2e821cfea5
 D:\projects\filp\src\Models\Order.hs:
-  hash: ff5aebf6564a9d8b37f80caf99f4e5b1b798bdd160d8ebd2a53897bb33cdb80f
+  hash: f8d096318011ffdcf1692dcd444a46d19d01e49b905163f406a864667b0b584f
 D:\projects\filp\src\Models\Product.hs:
-  hash: d5f0d9a9b181579abd33d4390ec3110123d4942ae99356e35c4f79f3e958b438
+  hash: bf7fe4894697833d70ee5454cc61b2c7e6c1d5fd6a24b388e4ce650c728f5f33
 D:\projects\filp\src\Models\User.hs:
   hash: cd38320859bafb81f305e2ca744b149cc91f7f77405ed8b60a3e3f90002c5950
 D:\projects\filp\src\Routes.hs:
-  hash: 9eabe3c5e2519fc9d5af63d51702c8d79cda7e2205eb5a9e0e1fb07ef0ec5100
+  hash: 9161d7a59cbdfacf242df4e90a952a6910168eccf78f55bdcea5b50184493975

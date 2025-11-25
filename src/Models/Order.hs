@@ -12,10 +12,10 @@ type OrderItem = (Int, Int)
 data Order = Order
   { orderID     :: Int
   , user_id     :: Int
-  , items       :: [OrderItem] 
+  , items       :: [OrderItem]
   , orderDate   :: UTCTime
-  , totalCost   :: Float
-  , finalCost   :: Float
+  , totalCost   :: Double
+  , finalCost   :: Double
   } deriving (Show, Eq, Generic)
 
 instance FromJSON Order

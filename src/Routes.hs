@@ -3,6 +3,8 @@
 module Routes where
 
 import Web.Scotty
+import Network.Wai.Middleware.Cors (cors, corsRequestHeaders, simpleCorsResourcePolicy, CorsResourcePolicy(..))
+import Network.HTTP.Types.Status (status200)
 import Database.PostgreSQL.Simple (Connection, Only(..), query)
 import Data.Aeson
   ( FromJSON(..), Value(..), (.=), object, (.:), toJSON
@@ -56,22 +58,42 @@ instance FromJSON LoginRequest where
     password <- o .: "password"
     return $ LoginRequest userName password
 
-routes :: Connection -> [Category] -> [Product] -> ScottyM ()
+
+routes :: Maybe Connection -> [Category] -> [Product] -> ScottyM ()
 routes conn categories allProducts = do
 
+  -- Handle OPTIONS for CORS preflight
+  options (regex ".*") $ status status200
+
+  -- Auth routes (mock for demo mode)
   post "/api/auth/register" $ do
-    req <- jsonData :: ActionM RegisterRequest
-    let hashedPwd = hashPassword (rrPassword req)
-    userId <- liftIO $ createUser conn (rrUserName req) (rrEmail req) hashedPwd
-    json $ object ["userId" .= userId, "message" .= ("User registered successfully!" :: String)]
+    case conn of
+      Just c -> do
+        req <- jsonData :: ActionM RegisterRequest
+        let userName = rrUserName req
+            email = rrEmail req
+            password = rrPassword req
+        userId <- liftIO $ createUser c userName email password
+        json $ object ["userId" .= userId]
+      Nothing -> do
+        -- Demo mode - just return mock user ID
+        json $ object ["userId" .= (1 :: Int)]
 
   post "/api/auth/login" $ do
-    req <- jsonData :: ActionM LoginRequest
-    let hashedPwd = hashPassword (lrPassword req)
-    users <- liftIO $ getUserByCredentials conn (lrUserName req) hashedPwd
-    case users of
-      [user] -> json $ object ["userId" .= userID user, "message" .= ("Login successful!" :: String)]
-      _ -> json $ object ["error" .= ("Invalid credentials" :: String)]
+    case conn of
+      Just c -> do
+        req <- jsonData :: ActionM LoginRequest
+        let userName = lrUserName req
+            password = lrPassword req
+        userResult <- liftIO $ getUserByCredentials c userName password
+        case userResult of
+          [user] -> json $ object ["userId" .= userID user]
+          _ -> raise "Invalid credentials"
+      Nothing -> do
+        -- Demo mode - accept any login
+        req <- jsonData :: ActionM LoginRequest
+        json $ object ["userId" .= (1 :: Int)]
+
 
   get "/api/products" $ json allProducts
 
@@ -129,12 +151,22 @@ routes conn categories allProducts = do
         final = calculateFinalCost categories items allProducts total
         saved = total - final
 
-    orderId <- liftIO $ createOrder conn userId items total final
-
-    json $ object
-      [ "orderId"   .= orderId
-      , "totalCost" .= total
-      , "finalCost" .= final
-      , "saved"     .= saved
-      , "message"   .= ("Order placed successfully!" :: String)
-      ]
+    case conn of
+      Just c -> do
+        orderId <- liftIO $ createOrder c userId items total final
+        json $ object
+          [ "orderId"   .= orderId
+          , "totalCost" .= total
+          , "finalCost" .= final
+          , "saved"     .= saved
+          , "message"   .= ("Order placed successfully!" :: String)
+          ]
+      Nothing -> do
+        -- Demo mode - just return mock order ID
+        json $ object
+          [ "orderId"   .= (999 :: Int)
+          , "totalCost" .= total
+          , "finalCost" .= final
+          , "saved"     .= saved
+          , "message"   .= ("Demo order placed successfully!" :: String)
+          ]
