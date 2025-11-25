@@ -25,7 +25,7 @@ instance FromRow Manufacturer where
   fromRow = Manufacturer <$> field <*> field <*> field
 
 instance FromRow User where
-  fromRow = User <$> field <*> field <*> field
+  fromRow = User <$> field <*> field <*> field <*> field
 
 instance FromRow Order where
   fromRow = do
@@ -77,11 +77,11 @@ getProductsByStock conn inStock = query conn
   \FROM products WHERE inStock = ?"
   (Only inStock)
 
-createUser :: Connection -> Text -> Text -> IO Int
-createUser conn username email = do
+createUser :: Connection -> Text -> Text -> Text -> IO Int
+createUser conn username email pwd = do
   [Only uid] <- query conn
-    "INSERT INTO users (userName, email) VALUES (?, ?) RETURNING userID"
-    (username, email)
+    "INSERT INTO users (userName, email, password) VALUES (?, ?, ?) RETURNING userID"
+    (username, email, pwd)
   return uid
 
 createOrder :: Connection -> Int -> [OrderItem] -> Float -> Float -> IO Int
@@ -95,3 +95,8 @@ getOrdersByUser :: Connection -> Int -> IO [Order]
 getOrdersByUser conn userId = query conn
   "SELECT orderID, user_id, items, orderDate, totalCost, finalCost FROM orders WHERE user_id = ? ORDER BY orderDate DESC"
   (Only userId)
+
+getUserByCredentials :: Connection -> Text -> Text -> IO [User]
+getUserByCredentials conn username pwd = query conn
+  "SELECT userID, userName, email, password FROM users WHERE userName = ? AND password = ?"
+  (username, pwd)

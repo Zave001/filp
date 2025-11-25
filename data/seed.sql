@@ -228,10 +228,10 @@ INSERT INTO products (name, category_id, manufacturer_id, price, inStock, attrib
 
 -- 4. Пользователи для тестирования
 
-INSERT INTO users (userName, email) VALUES
+INSERT INTO users (userName, email, password) VALUES
 
-('testuser', 'test@example.com'),
+('testuser', 'test@example.com', '5d41402abc4b2a76b9719d911017c592'),  -- md5 of 'hello'
 
-('guitarist', 'guitar@example.com'),
+('guitarist', 'guitar@example.com', '5d41402abc4b2a76b9719d911017c592'),
 
-('bassplayer', 'bass@example.com');
+('bassplayer', 'bass@example.com', '5d41402abc4b2a76b9719d911017c592');

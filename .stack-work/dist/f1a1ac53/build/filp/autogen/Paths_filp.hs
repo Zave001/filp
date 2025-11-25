@@ -43,7 +43,7 @@ getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: 
 
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
 bindir     = "D:\\projects\\filp\\.stack-work\\install\\5e36bf14\\bin"
-libdir     = "D:\\projects\\filp\\.stack-work\\install\\5e36bf14\\lib\\x86_64-windows-ghc-9.4.8\\filp-0.1.0.0-IC4wdpwmjr48rZwy44uUE8-filp"
+libdir     = "D:\\projects\\filp\\.stack-work\\install\\5e36bf14\\lib\\x86_64-windows-ghc-9.4.8\\filp-0.1.0.0-6J7HtZkX3Nt71gqYHIf1pR-filp"
 dynlibdir  = "D:\\projects\\filp\\.stack-work\\install\\5e36bf14\\lib\\x86_64-windows-ghc-9.4.8"
 datadir    = "D:\\projects\\filp\\.stack-work\\install\\5e36bf14\\share\\x86_64-windows-ghc-9.4.8\\filp-0.1.0.0"
 libexecdir = "D:\\projects\\filp\\.stack-work\\install\\5e36bf14\\libexec\\x86_64-windows-ghc-9.4.8\\filp-0.1.0.0"

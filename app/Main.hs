@@ -11,6 +11,8 @@ import Database.Queries
   , getProductsByCategory
   , getProductsByManufacturer
   , getProductsByStock
+  , createUser
+  , getUserByCredentials
   , createOrder
   )
 import Routes (routes)
@@ -38,6 +40,8 @@ main = do
   putStrLn "MusicalHub API успешно запущен!"
   putStrLn "Открывайте: http://localhost:8080"
   putStrLn "Примеры:"
+  putStrLn "  -> POST /api/auth/register (регистрация)"
+  putStrLn "  -> POST /api/auth/login (вход)"
   putStrLn "  -> GET /api/products"
   putStrLn "  -> GET /api/products/search?q=yamaha"
   putStrLn "  -> GET /api/products/category/1"

@@ -39,6 +39,7 @@ executable filp
     , time
     , scientific
     , http-types
+    , pureMD5
 
   ghc-options:
       -Wall

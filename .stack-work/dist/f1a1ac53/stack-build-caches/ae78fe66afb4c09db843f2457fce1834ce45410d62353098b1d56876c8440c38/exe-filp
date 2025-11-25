@@ -1,17 +1,17 @@
 D:\projects\filp\README.md:
   hash: f2289aae416ceea42617e5f7536bbfbb283754976d36089d86d45a970b27c30e
 D:\projects\filp\app\Main.hs:
-  hash: bbbba31103fa65d5e7f29f5249aa6872cbae01ae6575b5cbb0eb54ede9b1243e
+  hash: 91ab4b9c27a8538e1b4b258fd9830277b5eebfd7f902b95a843355f67dd5a6cf
 D:\projects\filp\data\seed.sql:
-  hash: 645c804b5bfd92f698095145e9d75c501909bcd96e06b8e1cec0b4b981a20413
+  hash: cf15d15498fd6c898f06020b4c34675ed76a4075a4b9893c861b657f9fbce1b8
 D:\projects\filp\filp.cabal:
-  hash: 140e99debdbdca34866ca32a484f73edd127102b8430281f87b38833f16be927
+  hash: ee99fd4ad2c534db0b1f389a8530b7195741daa72d32c6b23eaa7eceab3dc287
 D:\projects\filp\migrations\001-initial-schema.sql:
-  hash: 51ea0b48f7b6595837839c777013d2607348a1051995100b7f88bfa6905454b5
+  hash: b3a93a23cd8c449dd55f2d40c128f743cfb1191af95bdfca6a0c37cc6ecbeba6
 D:\projects\filp\src\Database\Connection.hs:
   hash: 21e275e0a7acf63d2560a1a6bd8ce2df75a36915b72c6577880d522f5ee82cd3
 D:\projects\filp\src\Database\Queries.hs:
-  hash: 0db194d2dd849e492326dd797ecf40459fd77112ebe0d5a82abebf3471cda59e
+  hash: b85a7497605bb0668cec5f3177de23d294c2c776924f56dda0c547dd122d78e5
 D:\projects\filp\src\Logic\Discount.hs:
   hash: f20a44a892718e526e0a026ed3a75bfc7956c9981e2a4c3e7c0edd7869db4f0f
 D:\projects\filp\src\Logic\Filters.hs:
@@ -25,6 +25,6 @@ D:\projects\filp\src\Models\Order.hs:
 D:\projects\filp\src\Models\Product.hs:
   hash: d5f0d9a9b181579abd33d4390ec3110123d4942ae99356e35c4f79f3e958b438
 D:\projects\filp\src\Models\User.hs:
-  hash: 6a2f79cdd8c67902ddf3efa83e3552bffe81999f4bf21f587f6114df37e621f4
+  hash: cd38320859bafb81f305e2ca744b149cc91f7f77405ed8b60a3e3f90002c5950
 D:\projects\filp\src\Routes.hs:
-  hash: 6077dffde1f0fd7788bd85a7ca2ac144c061b0653c43449509ed8be7bb3e90ff
+  hash: 9eabe3c5e2519fc9d5af63d51702c8d79cda7e2205eb5a9e0e1fb07ef0ec5100

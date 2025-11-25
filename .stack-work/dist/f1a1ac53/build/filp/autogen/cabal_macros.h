@@ -60,6 +60,16 @@
   (major1) == 0 && (major2) <  6 || \
   (major1) == 0 && (major2) == 6 && (minor) <= 5)
 #endif /* MIN_VERSION_postgresql_simple */
+/* package pureMD5-2.1.4 */
+#ifndef VERSION_pureMD5
+#define VERSION_pureMD5 "2.1.4"
+#endif /* VERSION_pureMD5 */
+#ifndef MIN_VERSION_pureMD5
+#define MIN_VERSION_pureMD5(major1,major2,minor) (\
+  (major1) <  2 || \
+  (major1) == 2 && (major2) <  1 || \
+  (major1) == 2 && (major2) == 1 && (minor) <= 4)
+#endif /* MIN_VERSION_pureMD5 */
 /* package scientific-0.3.7.0 */
 #ifndef VERSION_scientific
 #define VERSION_scientific "0.3.7.0"
@@ -183,7 +193,7 @@
 #endif /* MIN_TOOL_VERSION_runghc */
 
 #ifndef CURRENT_COMPONENT_ID
-#define CURRENT_COMPONENT_ID "filp-0.1.0.0-IC4wdpwmjr48rZwy44uUE8-filp"
+#define CURRENT_COMPONENT_ID "filp-0.1.0.0-6J7HtZkX3Nt71gqYHIf1pR-filp"
 #endif /* CURRENT_COMPONENT_ID */
 #ifndef CURRENT_PACKAGE_VERSION
 #define CURRENT_PACKAGE_VERSION "0.1.0.0"

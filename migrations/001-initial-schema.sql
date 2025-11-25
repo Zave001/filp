@@ -31,6 +31,7 @@ CREATE TABLE users (
         CHECK (LENGTH(userName) >= 1 AND LENGTH(userName) <= 50),
     email VARCHAR(100) NOT NULL UNIQUE
         CHECK (LENGTH(email) >= 3 AND LENGTH(email) <= 100 AND email ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+    password VARCHAR(255) NOT NULL,
     CHECK (userID BETWEEN 1 AND 10000)
 );
 

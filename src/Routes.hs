@@ -9,10 +9,11 @@ import Data.Aeson
   )
 import Data.Aeson.Types (withObject)
 import Data.Text.Lazy (unpack)
-import Data.Text (isInfixOf, toLower)  -- Добавлено!
+import Data.Text (Text, isInfixOf, toLower)  -- Добавлено!
 import Control.Monad.IO.Class (liftIO)
 import Models.Product
 import Models.Category
+import Models.User
 import Logic.Discount
 import Logic.Filters
 import Database.Queries
@@ -31,8 +32,46 @@ instance FromJSON OrderRequest where
     where
       parseItem = withObject "Item" $ \i -> (,) <$> i .: "productId" <*> i .: "quantity"
 
+data RegisterRequest = RegisterRequest
+  { rrUserName :: Text
+  , rrEmail    :: Text
+  , rrPassword :: Text
+  } deriving Show
+
+instance FromJSON RegisterRequest where
+  parseJSON = withObject "RegisterRequest" $ \o -> do
+    userName <- o .: "userName"
+    email <- o .: "email"
+    password <- o .: "password"
+    return $ RegisterRequest userName email password
+
+data LoginRequest = LoginRequest
+  { lrUserName :: Text
+  , lrPassword :: Text
+  } deriving Show
+
+instance FromJSON LoginRequest where
+  parseJSON = withObject "LoginRequest" $ \o -> do
+    userName <- o .: "userName"
+    password <- o .: "password"
+    return $ LoginRequest userName password
+
 routes :: Connection -> [Category] -> [Product] -> ScottyM ()
 routes conn categories allProducts = do
+
+  post "/api/auth/register" $ do
+    req <- jsonData :: ActionM RegisterRequest
+    let hashedPwd = hashPassword (rrPassword req)
+    userId <- liftIO $ createUser conn (rrUserName req) (rrEmail req) hashedPwd
+    json $ object ["userId" .= userId, "message" .= ("User registered successfully!" :: String)]
+
+  post "/api/auth/login" $ do
+    req <- jsonData :: ActionM LoginRequest
+    let hashedPwd = hashPassword (lrPassword req)
+    users <- liftIO $ getUserByCredentials conn (lrUserName req) hashedPwd
+    case users of
+      [user] -> json $ object ["userId" .= userID user, "message" .= ("Login successful!" :: String)]
+      _ -> json $ object ["error" .= ("Invalid credentials" :: String)]
 
   get "/api/products" $ json allProducts
 
