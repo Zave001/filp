@@ -99,6 +99,10 @@ class ApiService {
   async getOrders(userId) {
     return this.request(`/orders/${userId}`);
   }
+
+  async getAllOrders() {
+    return this.request('/orders');
+  }
 }
 
 export default new ApiService();

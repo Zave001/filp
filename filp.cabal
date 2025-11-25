@@ -36,6 +36,7 @@ executable filp
     , bytestring
     , postgresql-simple >= 0.6
     , unordered-containers
+    , containers
     , time
     , scientific
     , http-types

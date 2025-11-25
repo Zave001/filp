@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE BangPatterns #-}
 
 module Routes where
 
@@ -14,6 +15,11 @@ import Data.Text.Lazy (unpack)
 import Data.Text (Text)
 import qualified Data.Text as T
 import Control.Monad.IO.Class (liftIO)
+import Data.Time (UTCTime, getCurrentTime)
+import Data.IORef (IORef, newIORef, readIORef, atomicModifyIORef')
+import qualified Data.Map as Map
+import Data.Map (Map)
+import System.IO.Unsafe (unsafePerformIO)
 import Models.Product
 import Models.Category
 import Models.User
@@ -61,6 +67,13 @@ instance FromJSON LoginRequest where
     return $ LoginRequest userName password
 
 
+-- Global state for demo mode
+demoUserCounter :: IORef Int
+demoUserCounter = unsafePerformIO $ newIORef 1
+
+demoOrders :: IORef (Map Int [Order])
+demoOrders = unsafePerformIO $ newIORef Map.empty
+
 routes :: Maybe Connection -> [Category] -> [Product] -> ScottyM ()
 routes conn categories allProducts = do
 
@@ -92,9 +105,10 @@ routes conn categories allProducts = do
           [user] -> json $ object ["userId" .= userID user]
           _ -> raise "Invalid credentials"
       Nothing -> do
-        -- Demo mode - accept any login
+        -- Demo mode - accept any login and assign unique user ID
         req <- jsonData :: ActionM LoginRequest
-        json $ object ["userId" .= (1 :: Int)]
+        userId <- liftIO $ atomicModifyIORef' demoUserCounter (\x -> (x + 1, x + 1))
+        json $ object ["userId" .= userId]
 
 
   get "/api/products" $ json allProducts
@@ -202,9 +216,16 @@ routes conn categories allProducts = do
           , "message"   .= ("Order placed successfully!" :: String)
           ]
       Nothing -> do
-        -- Demo mode - just return mock order ID
+        -- Demo mode - create and store order
+        currentTime <- liftIO getCurrentTime
+        orderId <- liftIO $ atomicModifyIORef' demoUserCounter (\x -> (x + 1, x + 1))  -- Use counter for order ID too
+        let newOrder = Order orderId userId items currentTime total final
+        liftIO $ atomicModifyIORef' demoOrders (\orders ->
+          let userOrders = Map.findWithDefault [] userId orders
+              updatedOrders = Map.insert userId (newOrder : userOrders) orders
+          in (updatedOrders, ()))
         json $ object
-          [ "orderId"   .= (999 :: Int)
+          [ "orderId"   .= orderId
           , "totalCost" .= total
           , "finalCost" .= final
           , "saved"     .= saved
@@ -234,6 +255,18 @@ routes conn categories allProducts = do
         orders <- liftIO $ getOrdersByUser c userId
         json orders
       Nothing -> do
-        -- Demo mode - return mock order
-        let mockOrder = Order 1 userId [(1, 2), (3, 1)] (read "2023-01-01 00:00:00 UTC") 100000.0 95000.0
-        json [mockOrder]
+        -- Demo mode - return stored orders for this user
+        orders <- liftIO $ readIORef demoOrders
+        let userOrders = Map.findWithDefault [] userId orders
+        json userOrders
+
+  get "/api/orders" $ do
+    case conn of
+      Just c -> do
+        orders <- liftIO $ getAllOrders c
+        json orders
+      Nothing -> do
+        -- Demo mode - return all stored orders
+        orders <- liftIO $ readIORef demoOrders
+        let allOrders = concat $ Map.elems orders
+        json allOrders

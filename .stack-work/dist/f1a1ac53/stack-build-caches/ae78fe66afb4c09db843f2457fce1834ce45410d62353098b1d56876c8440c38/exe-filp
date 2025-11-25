@@ -5,13 +5,13 @@ D:\projects\filp\app\Main.hs:
 D:\projects\filp\data\seed.sql:
   hash: cf15d15498fd6c898f06020b4c34675ed76a4075a4b9893c861b657f9fbce1b8
 D:\projects\filp\filp.cabal:
-  hash: 097ac3ca55fe59e40159fe57d09e729bca8fd2829462ef73d1a3628441de5074
+  hash: 5377e6632546e65c2b16d1426d7ef0412e9974f2de24f413f7d9c8c605b0e05f
 D:\projects\filp\migrations\001-initial-schema.sql:
   hash: b3a93a23cd8c449dd55f2d40c128f743cfb1191af95bdfca6a0c37cc6ecbeba6
 D:\projects\filp\src\Database\Connection.hs:
   hash: 21e275e0a7acf63d2560a1a6bd8ce2df75a36915b72c6577880d522f5ee82cd3
 D:\projects\filp\src\Database\Queries.hs:
-  hash: 39a33d2cf39534d8d99e01ddf5c23594029ddce796293a4b2b9cbd5e8e72a2fa
+  hash: 7b6c0b0068bee98bdb6bcc7f9b34194ba9ee86c9386052c9ff6d2191b75ed74b
 D:\projects\filp\src\Logic\Discount.hs:
   hash: b6eed7f8f0aadaf55cbc488e698d9f040cc44a89a1c181f53989e141f5fe2272
 D:\projects\filp\src\Logic\Filters.hs:
@@ -27,4 +27,4 @@ D:\projects\filp\src\Models\Product.hs:
 D:\projects\filp\src\Models\User.hs:
   hash: cd38320859bafb81f305e2ca744b149cc91f7f77405ed8b60a3e3f90002c5950
 D:\projects\filp\src\Routes.hs:
-  hash: 59cd6ef7c3166330184764c0896bdbd9e86e74292544d2effb909b39ea55c0ed
+  hash: 56f8c8a1190d82363d8ae6f07b894f7ce1bb49c0ca5c90fe415577e39a64f32a

@@ -100,3 +100,7 @@ getUserByCredentials :: Connection -> Text -> Text -> IO [User]
 getUserByCredentials conn username pwd = query conn
   "SELECT userID, userName, email, password FROM users WHERE userName = ? AND password = ?"
   (username, pwd)
+
+getAllOrders :: Connection -> IO [Order]
+getAllOrders conn = query_ conn
+  "SELECT orderID, user_id, items, orderDate, totalCost, finalCost FROM orders ORDER BY orderDate DESC"

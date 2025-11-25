@@ -40,6 +40,16 @@
   (major1) == 0 && (major2) <  11 || \
   (major1) == 0 && (major2) == 11 && (minor) <= 5)
 #endif /* MIN_VERSION_bytestring */
+/* package containers-0.6.7 */
+#ifndef VERSION_containers
+#define VERSION_containers "0.6.7"
+#endif /* VERSION_containers */
+#ifndef MIN_VERSION_containers
+#define MIN_VERSION_containers(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  6 || \
+  (major1) == 0 && (major2) == 6 && (minor) <= 7)
+#endif /* MIN_VERSION_containers */
 /* package http-types-0.12.3 */
 #ifndef VERSION_http_types
 #define VERSION_http_types "0.12.3"
@@ -203,7 +213,7 @@
 #endif /* MIN_TOOL_VERSION_runghc */
 
 #ifndef CURRENT_COMPONENT_ID
-#define CURRENT_COMPONENT_ID "filp-0.1.0.0-J1Cn8E9ZOuz4hKLsqFp2U6-filp"
+#define CURRENT_COMPONENT_ID "filp-0.1.0.0-CXF4mpuSzg3BLwxtSghAQ0-filp"
 #endif /* CURRENT_COMPONENT_ID */
 #ifndef CURRENT_PACKAGE_VERSION
 #define CURRENT_PACKAGE_VERSION "0.1.0.0"
