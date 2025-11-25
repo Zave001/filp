@@ -2,41 +2,46 @@
 DROP TABLE IF EXISTS orders, products, users, manufacturers, categories CASCADE;
 
 CREATE TABLE categories (
-    id SERIAL PRIMARY KEY,
+    CategoryID SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
     description TEXT,
-    required_attributes JSONB NOT NULL DEFAULT '{}'::jsonb
+    required_attributes JSONB NOT NULL DEFAULT '{}'::JSONB
 );
 
 CREATE TABLE manufacturers (
-    id SERIAL PRIMARY KEY,
+    ManufacturerID SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
     country VARCHAR(50)
 );
 
 CREATE TABLE products (
-    id SERIAL PRIMARY KEY,
+    productID SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    category_id INTEGER REFERENCES categories(id),
-    manufacturer_id INTEGER REFERENCES manufacturers(id),
+    category_id INTEGER REFERENCES categories(CategoryID),
+    manufacturer_id INTEGER REFERENCES manufacturers(ManufacturerID),
     price DECIMAL(12,2) NOT NULL CHECK (price >= 1.0 AND price <= 5000000.0),
-    in_stock BOOLEAN DEFAULT true,
-    attributes JSONB NOT NULL DEFAULT '{}'::jsonb
+    inStock BOOLEAN DEFAULT true,
+    attributes JSONB NOT NULL DEFAULT '{}'::JSONB,
+    CHECK (productID BETWEEN 1 AND 10000)
 );
 
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE
-        CHECK (LENGTH(username) >= 1 AND LENGTH(username) <= 50),
+    userID SERIAL PRIMARY KEY,
+    userName VARCHAR(50) NOT NULL UNIQUE
+        CHECK (LENGTH(userName) >= 1 AND LENGTH(userName) <= 50),
     email VARCHAR(100) NOT NULL UNIQUE
-        CHECK (email ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
+        CHECK (LENGTH(email) >= 3 AND LENGTH(email) <= 100 AND email ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+    CHECK (userID BETWEEN 1 AND 10000)
 );
 
 CREATE TABLE orders (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES users(id),
+    orderID SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(userID),
     items JSONB NOT NULL,
-    order_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    total_cost DECIMAL(12,2) NOT NULL CHECK (total_cost >= 1.0),
-    final_cost DECIMAL(12,2) NOT NULL CHECK (final_cost >= 0.0 AND final_cost <= total_cost)
+    orderDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    totalCost DECIMAL(12,2) NOT NULL
+        CHECK (totalCost >= 1.0 AND totalCost <= 500000000.0),
+    finalCost DECIMAL(12,2) NOT NULL
+        CHECK (finalCost >= 0.0 AND finalCost <= 500000000.0),
+    CHECK (orderID BETWEEN 1 AND 10000)
 );

@@ -9,6 +9,8 @@ import Database.Queries
   , getAllProducts
   , searchProductsByName
   , getProductsByCategory
+  , getProductsByManufacturer
+  , getProductsByStock
   , createOrder
   )
 import Routes (routes)

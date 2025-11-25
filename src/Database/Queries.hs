@@ -42,44 +42,56 @@ instance FromRow Order where
 
 getAllCategories :: Connection -> IO [Category]
 getAllCategories conn = query_ conn
-  "SELECT id, name, description, required_attributes FROM categories ORDER BY name"
+  "SELECT CategoryID, name, description, required_attributes FROM categories ORDER BY name"
 
 getAllProducts :: Connection -> IO [Product]
 getAllProducts conn = query_ conn
-  "SELECT id, name, category_id, manufacturer_id, price, in_stock, attributes FROM products WHERE in_stock = true ORDER BY name"
+  "SELECT productID, name, category_id, manufacturer_id, price, inStock, attributes FROM products WHERE inStock = true ORDER BY name"
 
 getProductById :: Connection -> Int -> IO [Product]
 getProductById conn pid = query conn
-  "SELECT id, name, category_id, manufacturer_id, price, in_stock, attributes FROM products WHERE id = ?"
+  "SELECT productID, name, category_id, manufacturer_id, price, inStock, attributes FROM products WHERE productID = ?"
   (Only pid)
 
 searchProductsByName :: Connection -> Text -> IO [Product]
 searchProductsByName conn searchTerm = query conn
-  "SELECT id, name, category_id, manufacturer_id, price, in_stock, attributes \
-  \FROM products WHERE name ILIKE ? AND in_stock = true"
+  "SELECT productID, name, category_id, manufacturer_id, price, inStock, attributes \
+  \FROM products WHERE name ILIKE ? AND inStock = true"
   (Only $ "%" <> searchTerm <> "%")
 
 getProductsByCategory :: Connection -> Int -> IO [Product]
 getProductsByCategory conn catId = query conn
-  "SELECT id, name, category_id, manufacturer_id, price, in_stock, attributes \
-  \FROM products WHERE category_id = ? AND in_stock = true"
+  "SELECT productID, name, category_id, manufacturer_id, price, inStock, attributes \
+  \FROM products WHERE category_id = ? AND inStock = true"
   (Only catId)
+
+getProductsByManufacturer :: Connection -> Int -> IO [Product]
+getProductsByManufacturer conn manId = query conn
+  "SELECT productID, name, category_id, manufacturer_id, price, inStock, attributes \
+  \FROM products WHERE manufacturer_id = ? AND inStock = true"
+  (Only manId)
+
+getProductsByStock :: Connection -> Bool -> IO [Product]
+getProductsByStock conn inStock = query conn
+  "SELECT productID, name, category_id, manufacturer_id, price, inStock, attributes \
+  \FROM products WHERE inStock = ?"
+  (Only inStock)
 
 createUser :: Connection -> Text -> Text -> IO Int
 createUser conn username email = do
   [Only uid] <- query conn
-    "INSERT INTO users (username, email) VALUES (?, ?) RETURNING id"
+    "INSERT INTO users (userName, email) VALUES (?, ?) RETURNING userID"
     (username, email)
   return uid
 
 createOrder :: Connection -> Int -> [OrderItem] -> Float -> Float -> IO Int
 createOrder conn userId items total final = do
   [Only orderId] <- query conn
-    "INSERT INTO orders (user_id, items, total_cost, final_cost) VALUES (?, ?::jsonb, ?, ?) RETURNING id"
+    "INSERT INTO orders (user_id, items, totalCost, finalCost) VALUES (?, ?::jsonb, ?, ?) RETURNING orderID"
     (userId, A.toJSON items, total, final)
   return orderId
 
 getOrdersByUser :: Connection -> Int -> IO [Order]
 getOrdersByUser conn userId = query conn
-  "SELECT id, user_id, items, order_date, total_cost, final_cost FROM orders WHERE user_id = ? ORDER BY order_date DESC"
+  "SELECT orderID, user_id, items, orderDate, totalCost, finalCost FROM orders WHERE user_id = ? ORDER BY orderDate DESC"
   (Only userId)

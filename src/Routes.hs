@@ -14,6 +14,7 @@ import Control.Monad.IO.Class (liftIO)
 import Models.Product
 import Models.Category
 import Logic.Discount
+import Logic.Filters
 import Database.Queries
 
 data OrderRequest = OrderRequest
@@ -44,6 +45,40 @@ routes conn categories allProducts = do
   get "/api/products/category/:id" $ do
     catId <- read <$> param "id"
     let results = filter (\p -> category_id p == catId) allProducts
+    json results
+
+  get "/api/products/manufacturer/:id" $ do
+    manId <- read <$> param "id"
+    let results = filterByManufacturer manId allProducts
+    json results
+
+  get "/api/products/stock/:bool" $ do
+    stock <- read <$> param "bool"
+    let results = filterByStock stock allProducts
+    json results
+
+  get "/api/products/sort/price/asc" $ do
+    let results = sortByPriceAsc allProducts
+    json results
+
+  get "/api/products/sort/price/desc" $ do
+    let results = sortByPriceDesc allProducts
+    json results
+
+  get "/api/products/sort/name" $ do
+    let results = sortByName allProducts
+    json results
+
+  get "/api/products/filter/attribute" $ do
+    attr <- param "attr"
+    val <- param "value"
+    let results = filterByAttribute attr val allProducts
+    json results
+
+  get "/api/products/filter/numeric" $ do
+    attr <- param "attr"
+    target <- read <$> param "value"
+    let results = filterByNumericAttribute attr target allProducts
     json results
 
   post "/api/orders" $ do
